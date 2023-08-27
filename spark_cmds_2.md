@@ -26,3 +26,6 @@ df.show(5)
 |        202|       Pat|      Fay|
 +-----------+----------+---------+
 only showing top 5 rows
+
+# another way to call the col without inverted commans 
+ empdf.select(empdf.EMPLOYEE_ID,empdf.FIRST_NAME,empdf.LAST_NAME).show(5)
