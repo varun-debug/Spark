@@ -449,3 +449,5 @@ empdf.withColumn("salary_rank",dense_rank().over(windowSpec)).select("DEPARTMENT
 only showing top 20 rows
 
 
+# sum means rollinng sum department wise
+empdf.withColumn("salary_running_sum", sum("Salary").over(windowSpec)).select("DEPARTMENT_ID","SALARY","salary_running_sum").show()
