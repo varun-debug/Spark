@@ -28,13 +28,13 @@ df.show(5)
 only showing top 5 rows
 
 # another way to call the col without inverted commans i.e. Second systax
- empdf.select(empdf.EMPLOYEE_ID,empdf.FIRST_NAME,empdf.LAST_NAME).show(5)
+empdf.select(empdf.EMPLOYEE_ID,empdf.FIRST_NAME,empdf.LAST_NAME).show(5)
 
 # third syntax
- empdf.select(empdf["EMPLOYEE_ID"],empdf["FIRST_NAME"],empdf["LAST_NAME"]).show(5)
+empdf.select(empdf["EMPLOYEE_ID"],empdf["FIRST_NAME"],empdf["LAST_NAME"]).show(5)
 
  # Fourth syntax(preffered way)
- from pyspark.sql.functions import col
+from pyspark.sql.functions import col
 empdf.select(col("EMPLOYEE_ID"),col("FIRST_NAME"),col("LAST_NAME")).show(5)
 
 # to use alias names
