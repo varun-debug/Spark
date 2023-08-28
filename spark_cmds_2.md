@@ -288,4 +288,67 @@ df1 = spark.sql("Select * from employee")
 |          110|       20308|
 |           30|       24900|
 +-------------+------------+
->>> 
+
+# joins
+deptdf = spark.read.option("header",True).option("Inferschema",True).csv("/input_data/departments.csv")
+
+empdf.join(deptdf,empdf.DEPARTMENT_ID == deptdf.DEPARTMENT_ID,"inner").show() // just change the inner with full/fullouter,left and right for other type of joins
+
+# self join
+empdf.alias("emp1").join(empdf.alias("emp2"),col("emp1.MANAGER_ID") == col("emp2.EMPLOYEE_ID"),"inner")\
+... .select(col("emp1.MANAGER_ID"),col("emp2.FIRST_NAME"),col("emp2.LAST_NAME")).dropDuplicates().show()
++----------+----------+---------+
+|MANAGER_ID|FIRST_NAME|LAST_NAME|
++----------+----------+---------+
+|       122|     Payam| Kaufling|
+|       101|     Neena|  Kochhar|
+|       100|    Steven|     King|
+|       205|   Shelley|  Higgins|
+|       114|       Den| Raphaely|
+|       103| Alexander|   Hunold|
+|       124|     Kevin|  Mourgos|
+|       120|   Matthew|    Weiss|
+|       123|    Shanta|  Vollman|
+|       121|      Adam|    Fripp|
+|       108|     Nancy|Greenberg|
+|       102|       Lex|  De Haan|
+|       201|   Michael|Hartstein|
++----------+----------+---------+
+
+# multiple table join
+create one more table just for join purpose
+
+from pyspark.sql.types import StructType,StructField, StringType, IntegerType
+>>> location_data = [(1700,"India"),(1800,"USA")]
+>>> schema = StructType([StructField("Location_Id",IntegerType(),True),StructField("Location_Name",StringType(),True)])
+>>> locdf = spark.createDataFrame(data = location_data, schema = schema)
+>>> locdf.show()
++-----------+-------------+
+|Location_Id|Location_Name|
++-----------+-------------+
+|       1700|        India|
+|       1800|          USA|
++-----------+-------------+
+>>> empdf.join(deptdf,(empdf.DEPARTMENT_ID == deptdf.DEPARTMENT_ID) & (deptdf.LOCATION_ID == 1700),"inner").join(locdf, deptdf.LOCATION_ID == locdf.Location_Id,"inner").select(empdf.EMPLOYEE_ID,empdf.DEPARTMENT_ID,deptdf.DEPARTMENT_NAME,locdf.Location_Name).show()
++-----------+-------------+---------------+-------------+
+|EMPLOYEE_ID|DEPARTMENT_ID|DEPARTMENT_NAME|Location_Name|
++-----------+-------------+---------------+-------------+
+|        205|          110|     Accounting|        India|
+|        206|          110|     Accounting|        India|
+|        108|          100|        Finance|        India|
+|        109|          100|        Finance|        India|
+|        110|          100|        Finance|        India|
+|        111|          100|        Finance|        India|
+|        112|          100|        Finance|        India|
+|        113|          100|        Finance|        India|
+|        100|           90|      Executive|        India|
+|        101|           90|      Executive|        India|
+|        102|           90|      Executive|        India|
+|        114|           30|     Purchasing|        India|
+|        115|           30|     Purchasing|        India|
+|        116|           30|     Purchasing|        India|
+|        117|           30|     Purchasing|        India|
+|        118|           30|     Purchasing|        India|
+|        119|           30|     Purchasing|        India|
+|        200|           10| Administration|        India|
++-----------+-------------+---------------+-------------+
