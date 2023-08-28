@@ -226,5 +226,32 @@ empdf.groupBy("DEPARTMENT_ID").agg( sum("Salary").alias("Sum_of_Sal"), max("Sala
 |           30|     24900|  11000|   2500|
 +-------------+----------+-------+-------+
 
+# if-else statements
+empdf.withColumn("Emp_Grade", when(col("Salary") > 15000, "A").when((col("Salary") >= 10000) & (col("Salary") < 10000),"B").otherwise("C")).select("EMPLOYEE_ID","FIRST_NAME","Emp_Grade").show()
++-----------+----------+---------+
+|EMPLOYEE_ID|FIRST_NAME|Emp_Grade|
++-----------+----------+---------+
+|        198|    Donald|        C|
+|        199|   Douglas|        C|
+|        200|  Jennifer|        C|
+|        201|   Michael|        C|
+|        202|       Pat|        C|
+|        203|     Susan|        C|
+|        204|   Hermann|        C|
+|        205|   Shelley|        C|
+|        206|   William|        C|
+|        100|    Steven|        A|
+|        101|     Neena|        A|
+|        102|       Lex|        A|
+|        103| Alexander|        C|
+|        104|     Bruce|        C|
+|        105|     David|        C|
+|        106|     Valli|        C|
+|        107|     Diana|        C|
+|        108|     Nancy|        C|
+|        109|    Daniel|        C|
+|        110|      John|        C|
++-----------+----------+---------+
+only showing top 20 rows
 
 
