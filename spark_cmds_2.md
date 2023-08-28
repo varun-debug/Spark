@@ -95,3 +95,42 @@ empdf.withColumn("Salary",col("Salary") + 1000).select("EMPLOYEE_ID","FIRST_NAME
 |        206|   William|  9300|
 |        100|    Steven| 25000|
 ..............................
+
+# rename the column name
+empdf.withColumnRenamed("SALARY","EMP_SALARY").show()
+
+# delete or drop the column
+ empdf.drop("COMMISSION_PCT").show()
+
+# Apply filters
+empdf.filter(col("SALARY")> 5000).select("FIRST_NAME","SALARY").show()
+
+# using and applying multiple filters
+
+empdf.filter((col("SALARY")> 5000) & (col("DEPARTMENT_ID")== 50)).select("DEPARTMENT_ID","FIRST_NAME","SALARY").show()
++-------------+----------+------+
+|DEPARTMENT_ID|FIRST_NAME|SALARY|
++-------------+----------+------+
+|           50|   Matthew|  8000|
+|           50|      Adam|  8200|
+|           50|     Payam|  7900|
+|           50|    Shanta|  6500|
+|           50|     Kevin|  5800|
++-------------+----------+------+
+
+# another simple way
+empdf.filter(" SALARY > 5000 and  DEPARTMENT_ID != 50").show(5)
+
+empdf.filter(" SALARY > 5000 and  DEPARTMENT_ID == 50").show(5)
++-----------+----------+---------+--------+------------+---------+------+------+--------------+----------+-------------+
+|EMPLOYEE_ID|FIRST_NAME|LAST_NAME|   EMAIL|PHONE_NUMBER|HIRE_DATE|JOB_ID|SALARY|COMMISSION_PCT|MANAGER_ID|DEPARTMENT_ID|
++-----------+----------+---------+--------+------------+---------+------+------+--------------+----------+-------------+
+|        120|   Matthew|    Weiss|  MWEISS|650.123.1234|18-JUL-04|ST_MAN|  8000|            - |       100|           50|
+|        121|      Adam|    Fripp|  AFRIPP|650.123.2234|10-APR-05|ST_MAN|  8200|            - |       100|           50|
+|        122|     Payam| Kaufling|PKAUFLIN|650.123.3234|01-MAY-03|ST_MAN|  7900|            - |       100|           50|
+|        123|    Shanta|  Vollman|SVOLLMAN|650.123.4234|10-OCT-05|ST_MAN|  6500|            - |       100|           50|
+|        124|     Kevin|  Mourgos|KMOURGOS|650.123.5234|16-NOV-07|ST_MAN|  5800|            - |       100|           50|
++-----------+----------+---------+--------+------------+---------+------+------+--------------+----------+-------------+
+
+empdf.filter(" DEPARTMENT_ID != 50").show(5)
+
