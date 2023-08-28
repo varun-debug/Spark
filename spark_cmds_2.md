@@ -134,3 +134,29 @@ empdf.filter(" SALARY > 5000 and  DEPARTMENT_ID == 50").show(5)
 
 empdf.filter(" DEPARTMENT_ID != 50").show(5)
 
+# drop the duplicate vales
+empdf.dropDuplicates().show()
+
+# drop the duplicates according to the column wise 
+empdf.dropDuplicates(["DEPARTMENT_ID","HIRE_DATE"]).select("EMPLOYEE_ID","DEPARTMENT_ID","HIRE_DATE").show()
+
+# use the sql functions 
+from pyspark.sql.functions import *
+
+empdf.count()
+
+empdf.select(count("*")).show()
++--------+
+|count(1)|
++--------+
+|      50|
++--------+
+
+#adding allias to it
+empdf.select(count("*").alias("Total_Count")).show()
++-----------+
+|Total_Count|
++-----------+
+|         50|
++-----------+
+
