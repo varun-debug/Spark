@@ -254,4 +254,38 @@ empdf.withColumn("Emp_Grade", when(col("Salary") > 15000, "A").when((col("Salary
 +-----------+----------+---------+
 only showing top 20 rows
 
+we can use "\" to use the long code in multiple lines
 
+# how to use as sql creating temporary view 
+This allows you to query the DataFrame using SQL-like syntax using the spark.sql() method. Let's break down the usage of 
+
+empdf.CreateOrReplaceTempView("employee")
+
+df1 = spark.sql("Select * from employee")
+>>> df1.show(5)
++-----------+----------+---------+--------+------------+---------+--------+------+--------------+----------+-------------+
+|EMPLOYEE_ID|FIRST_NAME|LAST_NAME|   EMAIL|PHONE_NUMBER|HIRE_DATE|  JOB_ID|SALARY|COMMISSION_PCT|MANAGER_ID|DEPARTMENT_ID|
++-----------+----------+---------+--------+------------+---------+--------+------+--------------+----------+-------------+
+|        198|    Donald| OConnell|DOCONNEL|650.507.9833|21-JUN-07|SH_CLERK|  2600|            - |       124|           50|
+|        199|   Douglas|    Grant|  DGRANT|650.507.9844|13-JAN-08|SH_CLERK|  2600|            - |       124|           50|
+|        200|  Jennifer|   Whalen| JWHALEN|515.123.4444|17-SEP-03| AD_ASST|  4400|            - |       101|           10|
+|        201|   Michael|Hartstein|MHARTSTE|515.123.5555|17-FEB-04|  MK_MAN| 13000|            - |       100|           20|
+|        202|       Pat|      Fay|    PFAY|603.123.6666|17-AUG-05|  MK_REP|  6000|            - |       201|           20|
++-----------+----------+---------+--------+------------+---------+--------+------+--------------+----------+-------------+
+>>> df2 = spark.sql("Select department_id,sum(Salary) as Total_Salary from employee group by department_id")
+>>> df2.show()
++-------------+------------+
+|department_id|Total_Salary|
++-------------+------------+
+|           20|       19000|
+|           40|        6500|
+|          100|       51608|
+|           10|        4400|
+|           50|       85600|
+|           70|       10000|
+|           90|       58000|
+|           60|       28800|
+|          110|       20308|
+|           30|       24900|
++-------------+------------+
+>>> 
