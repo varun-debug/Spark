@@ -160,3 +160,71 @@ empdf.select(count("*").alias("Total_Count")).show()
 |         50|
 +-----------+
 
+# max and min 
+empdf.select(max("SALARY").alias("Max_Sal")).show()
++-------+
+|Max_Sal|
++-------+
+|  24000|
++-------+
+
+>>> empdf.select(min("SALARY").alias("MIN_Sal")).show()
++-------+
+|MIN_Sal|
++-------+
+|   2100|
++-------+
+# avg and sum
+ empdf.select(avg("SALARY").alias("Avg_Sal")).show()
++-------+
+|Avg_Sal|
++-------+
+|6182.32|
++-------+
+
+>>> empdf.select(sum("SALARY").alias("Total_sum")).show()
++---------+
+|Total_sum|
++---------+
+|   309116|
++---------+
+
+# orderBy in asc
+empdf.select("EMPLOYEE_ID","FIRST_NAME","DEPARTMENT_ID","Salary").orderBy("SALARY").show()
+
+# orderBY in desc
+empdf.select("EMPLOYEE_ID","FIRST_NAME","DEPARTMENT_ID","Salary").orderBy(col("SALARY").desc()).show()
+
+# multi column ordering 
+empdf.select("EMPLOYEE_ID","FIRST_NAME","DEPARTMENT_ID","Salary").orderBy(col("DEPARTMENT_ID").asc(),col("SALARY").desc()).show()
+
+# grouping 
+empdf.groupBy("DEPARTMENT_ID").sum("Salary").show()
+ same goes with min and max
+
+# grouping with multiple columns
+empdf.groupBy("DEPARTMENT_ID","Job_ID").sum("Salary").show()
+
+empdf.groupBy("DEPARTMENT_ID","Job_ID").sum("Salary","EMPLOYEE_ID").show()
+
+# preffered way of grouping as we can give alias
+empdf.groupBy("DEPARTMENT_ID").agg( sum("Salary").alias("Sum_of_Sal")).show() 
+
+empdf.groupBy("DEPARTMENT_ID").agg( sum("Salary").alias("Sum_of_Sal"), max("Salary").alias("MAx_Sal"), min("Salary").alias("Min_Sal")).show()
++-------------+----------+-------+-------+
+|DEPARTMENT_ID|Sum_of_Sal|MAx_Sal|Min_Sal|
++-------------+----------+-------+-------+
+|           20|     19000|  13000|   6000|
+|           40|      6500|   6500|   6500|
+|          100|     51608|  12008|   6900|
+|           10|      4400|   4400|   4400|
+|           50|     85600|   8200|   2100|
+|           70|     10000|  10000|  10000|
+|           90|     58000|  24000|  17000|
+|           60|     28800|   9000|   4200|
+|          110|     20308|  12008|   8300|
+|           30|     24900|  11000|   2500|
++-------------+----------+-------+-------+
+
+
+
