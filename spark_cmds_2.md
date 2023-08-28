@@ -388,3 +388,64 @@ then call that function like other functions
 |        110|      John|     Chen|            JOHN|           CHEN|
 +-----------+----------+---------+----------------+---------------+
 only showing top 20 rows
+
+# windows function
+from pyspark.sql.window import Window
+>>> windowSpec = Window.partitionBy("DEPARTMENT_ID").orderBy("Salary")
+>>> empdf.withColumn("salary_rank",rank().over(windowSpec)).select("DEPARTMENT_ID","SALARY","salary_rank").show()
++-------------+------+-----------+
+|DEPARTMENT_ID|SALARY|salary_rank|
++-------------+------+-----------+
+|           10|  4400|          1|
+|           20|  6000|          1|
+|           20| 13000|          2|
+|           30|  2500|          1|
+|           30|  2600|          2|
+|           30|  2800|          3|
+|           30|  2900|          4|
+|           30|  3100|          5|
+|           30| 11000|          6|
+|           40|  6500|          1|
+|           50|  2100|          1|
+|           50|  2200|          2|
+|           50|  2200|          2|
+|           50|  2400|          4|
+|           50|  2400|          4|
+|           50|  2500|          6|
+|           50|  2500|          6|
+|           50|  2600|          8|
+|           50|  2600|          8|
+|           50|  2700|         10|
++-------------+------+-----------+
+only showing top 20 rows
+
+
+Now useing Dense_rank
+empdf.withColumn("salary_rank",dense_rank().over(windowSpec)).select("DEPARTMENT_ID","SALARY","salary_rank").show()
++-------------+------+-----------+
+|DEPARTMENT_ID|SALARY|salary_rank|
++-------------+------+-----------+
+|           10|  4400|          1|
+|           20|  6000|          1|
+|           20| 13000|          2|
+|           30|  2500|          1|
+|           30|  2600|          2|
+|           30|  2800|          3|
+|           30|  2900|          4|
+|           30|  3100|          5|
+|           30| 11000|          6|
+|           40|  6500|          1|
+|           50|  2100|          1|
+|           50|  2200|          2|
+|           50|  2200|          2|
+|           50|  2400|          3|
+|           50|  2400|          3|
+|           50|  2500|          4|
+|           50|  2500|          4|
+|           50|  2600|          5|
+|           50|  2600|          5|
+|           50|  2700|          6|
++-------------+------+-----------+
+only showing top 20 rows
+
+
