@@ -451,3 +451,41 @@ only showing top 20 rows
 
 # sum means rollinng sum department wise
 empdf.withColumn("salary_running_sum", sum("Salary").over(windowSpec)).select("DEPARTMENT_ID","SALARY","salary_running_sum").show()
+
+# save the results
+result_df_new = empdf.join(deptdf,empdf.DEPARTMENT_ID == deptdf.DEPARTMENT_ID,"inner").drop(deptdf.MANAGER_ID).drop(deptdf.DEPARTMENT_ID)
+
+result_df_new.write.mode("overwrite").option("header",True).save("/output/result")
+
+ hdfs dfs -ls /output/result
+Found 2 items
+-rw-r--r--   1 abc supergroup          0 2023-08-28 18:47 /output/result/_SUCCESS
+-rw-r--r--   1 abc supergroup       6609 2023-08-28 18:47 /output/result/part-00000-ed7ec1b4-7b7e-43d4-b9be-2810b85e021b-c000.snappy.parquet
+
+
+#for csv format save
+result_df_new.write.mode("overwrite").option("header",True).format("csv").save("/output/result")
+
+abc@8ae3505765c7:~/workspace$ hdfs dfs -ls /output/result
+Found 2 items
+-rw-r--r--   1 abc supergroup          0 2023-08-28 18:50 /output/result/_SUCCESS
+-rw-r--r--   1 abc supergroup       4410 2023-08-28 18:50 /output/result/part-00000-c32d421a-6729-4b8e-9fdb-1558b54ba566-c000.csv
+
+# partition by department name
+#we can use append also instead of override if we do not want to overwrite the file
+result_df_new.write.mode("overwrite").partitionBy("DEPARTMENT_NAME").option("header",True).format("csv").save("/output/result")
+
+#here is how partition will look after saving
+abc@8ae3505765c7:~/workspace$ hdfs dfs -ls /output/result
+Found 11 items
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Accounting
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Administration
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Executive
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Finance
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Human Resources
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=IT
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Marketing
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Public Relations
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Purchasing
+drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Shipping
+-rw-r--r--   1 abc supergroup          0 2023-08-28 18:52 /output/result/_SUCCESS
