@@ -77,4 +77,21 @@ EMPLOYEE_ID|FIRST_NAME|SALARY|New_Salary|
 |        109|    Daniel|  9000|     10000|
 |        110|      John|  8200|      9200|
  
+ # how to get chanining means if we do not want to put old salary col but only the new updated salary col for above scenario
  
+empdf.withColumn("Salary",col("Salary") + 1000).select("EMPLOYEE_ID","FIRST_NAME","SALARY").show()
+
++-----------+----------+------+
+|EMPLOYEE_ID|FIRST_NAME|SALARY|
++-----------+----------+------+
+|        198|    Donald|  3600|
+|        199|   Douglas|  3600|
+|        200|  Jennifer|  5400|
+|        201|   Michael| 14000|
+|        202|       Pat|  7000|
+|        203|     Susan|  7500|
+|        204|   Hermann| 11000|
+|        205|   Shelley| 13008|
+|        206|   William|  9300|
+|        100|    Steven| 25000|
+..............................
