@@ -489,3 +489,16 @@ drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTM
 drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Purchasing
 drwxr-xr-x   - abc supergroup          0 2023-08-28 18:52 /output/result/DEPARTMENT_NAME=Shipping
 -rw-r--r--   1 abc supergroup          0 2023-08-28 18:52 /output/result/_SUCCESS
+
+
+# get the number of partition
+
+result_df_new.rdd.getNumPartitions()
+
+1 
+
+# how to increase the partition so we need to add it to new dataframe
+new_df=result_df_new.repartition(10)
+>>> new_df.rdd.getNumPartitions()
+10
+>>> 
