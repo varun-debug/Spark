@@ -352,3 +352,39 @@ from pyspark.sql.types import StructType,StructField, StringType, IntegerType
 |        119|           30|     Purchasing|        India|
 |        200|           10| Administration|        India|
 +-----------+-------------+---------------+-------------+
+
+# User defined functions in spark
+first create using @udf
+
+@udf(returnType=StringType())
+... def UpperCase(in_str):
+...     out_str = in_str.upper()
+...     return out_str
+
+then call that function like other functions
+ empdf.select(col("EMPLOYEE_ID"),col("FIRST_NAME"),col("LAST_NAME"),UpperCase(col("FIRST_NAME")).alias("Upper_Case_First"),UpperCase(col("LAST_NAME")).alias("Upper_Case_Last")).show()
++-----------+----------+---------+----------------+---------------+             
+|EMPLOYEE_ID|FIRST_NAME|LAST_NAME|Upper_Case_First|Upper_Case_Last|
++-----------+----------+---------+----------------+---------------+
+|        198|    Donald| OConnell|          DONALD|       OCONNELL|
+|        199|   Douglas|    Grant|         DOUGLAS|          GRANT|
+|        200|  Jennifer|   Whalen|        JENNIFER|         WHALEN|
+|        201|   Michael|Hartstein|         MICHAEL|      HARTSTEIN|
+|        202|       Pat|      Fay|             PAT|            FAY|
+|        203|     Susan|   Mavris|           SUSAN|         MAVRIS|
+|        204|   Hermann|     Baer|         HERMANN|           BAER|
+|        205|   Shelley|  Higgins|         SHELLEY|        HIGGINS|
+|        206|   William|    Gietz|         WILLIAM|          GIETZ|
+|        100|    Steven|     King|          STEVEN|           KING|
+|        101|     Neena|  Kochhar|           NEENA|        KOCHHAR|
+|        102|       Lex|  De Haan|             LEX|        DE HAAN|
+|        103| Alexander|   Hunold|       ALEXANDER|         HUNOLD|
+|        104|     Bruce|    Ernst|           BRUCE|          ERNST|
+|        105|     David|   Austin|           DAVID|         AUSTIN|
+|        106|     Valli|Pataballa|           VALLI|      PATABALLA|
+|        107|     Diana|  Lorentz|           DIANA|        LORENTZ|
+|        108|     Nancy|Greenberg|           NANCY|      GREENBERG|
+|        109|    Daniel|   Faviet|          DANIEL|         FAVIET|
+|        110|      John|     Chen|            JOHN|           CHEN|
++-----------+----------+---------+----------------+---------------+
+only showing top 20 rows
