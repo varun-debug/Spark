@@ -1,1 +1,1 @@
-# Spark practival tutorial
+# Spark practical tutorial
